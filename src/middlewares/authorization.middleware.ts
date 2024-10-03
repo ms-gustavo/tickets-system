@@ -28,6 +28,7 @@ export const authorize = (requiredRole: string) => {
       ) as TokenPayload;
 
       if (decoded.role !== requiredRole) {
+        console.log("aqui", decoded);
         throw new AppError(
           serverStringErrorsAndCodes.unauthorizedAccess.message,
           serverStringErrorsAndCodes.unauthorizedAccess.code
@@ -36,11 +37,16 @@ export const authorize = (requiredRole: string) => {
 
       req.user = { id: decoded.userId, role: decoded.role };
       next();
-    } catch (error) {
-      throw new AppError(
-        serverStringErrorsAndCodes.invalidToken.message,
-        serverStringErrorsAndCodes.invalidToken.code
-      );
+    } catch (error: unknown) {
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({
+        message: "Internal server error",
+        error: (error as Error).message,
+      });
+      return;
     }
   };
 };

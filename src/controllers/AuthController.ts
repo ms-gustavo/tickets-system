@@ -7,12 +7,11 @@ import { AppError } from "../shared/appErrors";
 import { LoginUserDTO } from "../dtos/UserDTO/login";
 
 const userRepository = new UserRepository();
-const registerUserUseCase = new RegisterUserUseCase(userRepository);
-const loginUserUseCase = new LoginUserUseCase(userRepository);
 
 export class AuthController {
   async register(req: Request, res: Response) {
     const { name, email, password, role }: CreateUserDTO = req.body;
+    const registerUserUseCase = new RegisterUserUseCase(userRepository);
 
     try {
       const { userWithoutPassword, token } = await registerUserUseCase.execute({
@@ -38,6 +37,7 @@ export class AuthController {
 
   async login(req: Request, res: Response) {
     const { email, password }: LoginUserDTO = req.body;
+    const loginUserUseCase = new LoginUserUseCase(userRepository);
 
     try {
       const { userWithoutPassword, token } = await loginUserUseCase.execute({

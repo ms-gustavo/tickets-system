@@ -29,6 +29,7 @@ model Event {
   description String
   date DateTime
   location String
+  createdBy String
   tickets Ticket[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
