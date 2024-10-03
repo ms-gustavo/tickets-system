@@ -5,6 +5,7 @@ import { AppError } from "../shared/appErrors";
 import { User } from "@prisma/client";
 import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
 import { LoginUserProps } from "../interfaces/interface";
+import TokenService from "../services/Token/TokenService";
 
 export class LoginUserUseCase {
   private userRepository: UserRepository;
@@ -37,18 +38,6 @@ export class LoginUserUseCase {
     }
   }
 
-  private generateToken(user: User) {
-    const token = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1h",
-      }
-    );
-
-    return token;
-  }
-
   async execute({ email, password }: LoginUserProps) {
     const emailToLowerCase: string = email.toLowerCase();
 
@@ -56,7 +45,7 @@ export class LoginUserUseCase {
 
     await this.checkIfPasswordIsCorrect(password, user);
 
-    const token = this.generateToken(user);
+    const token = TokenService.generateToken(user);
 
     const userWithoutPassword = { ...user };
     delete (userWithoutPassword as Partial<User>).password;

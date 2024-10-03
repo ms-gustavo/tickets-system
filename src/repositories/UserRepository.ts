@@ -18,11 +18,6 @@ export default class UserRepository {
         password: hashedPassword,
         role,
       },
-      select: {
-        name: true,
-        email: true,
-        role: true,
-      },
     });
   }
 }

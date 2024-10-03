@@ -15,13 +15,13 @@ export class AuthController {
     const { name, email, password, role }: CreateUserDTO = req.body;
 
     try {
-      const user = await registerUserUseCase.execute({
+      const { userWithoutPassword, token } = await registerUserUseCase.execute({
         name,
         email,
         password,
         role,
       });
-      res.status(201).json(user);
+      res.status(201).json({ user: userWithoutPassword, token });
       return;
     } catch (error: unknown) {
       if (error instanceof AppError) {

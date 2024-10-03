@@ -2,6 +2,8 @@ import UserRepository from "../repositories/UserRepository";
 import { AppError } from "../shared/appErrors";
 import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
 import { CreateUserProps } from "../interfaces/interface";
+import TokenService from "../services/Token/TokenService";
+import { User } from "@prisma/client";
 
 export class RegisterUserUseCase {
   private userRepository: UserRepository;
@@ -34,6 +36,11 @@ export class RegisterUserUseCase {
       password,
       role,
     });
-    return user;
+
+    const token = TokenService.generateToken(user);
+    const userWithoutPassword = { ...user };
+    delete (userWithoutPassword as Partial<User>).password;
+
+    return { userWithoutPassword, token };
   }
 }
