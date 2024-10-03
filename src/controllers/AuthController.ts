@@ -15,12 +15,12 @@ export class AuthController {
     const { name, email, password, role }: CreateUserDTO = req.body;
 
     try {
-      const user = await registerUserUseCase.execute(
+      const user = await registerUserUseCase.execute({
         name,
         email,
         password,
-        role
-      );
+        role,
+      });
       res.status(201).json(user);
       return;
     } catch (error: unknown) {
@@ -40,8 +40,11 @@ export class AuthController {
     const { email, password }: LoginUserDTO = req.body;
 
     try {
-      const { user, token } = await loginUserUseCase.execute(email, password);
-      res.status(200).json({ user, token });
+      const { userWithoutPassword, token } = await loginUserUseCase.execute({
+        email,
+        password,
+      });
+      res.status(200).json({ user: userWithoutPassword, token });
       return;
     } catch (error: unknown) {
       if (error instanceof AppError) {

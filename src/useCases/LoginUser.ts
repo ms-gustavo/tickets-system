@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { AppError } from "../shared/appErrors";
 import { User } from "@prisma/client";
 import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
+import { LoginUserProps } from "../interfaces/interface";
 
 export class LoginUserUseCase {
   private userRepository: UserRepository;
@@ -48,7 +49,7 @@ export class LoginUserUseCase {
     return token;
   }
 
-  async execute(email: string, password: string) {
+  async execute({ email, password }: LoginUserProps) {
     const emailToLowerCase: string = email.toLowerCase();
 
     const user = await this.checkIfUserExists(emailToLowerCase);
@@ -57,6 +58,9 @@ export class LoginUserUseCase {
 
     const token = this.generateToken(user);
 
-    return { user, token };
+    const userWithoutPassword = { ...user };
+    delete (userWithoutPassword as Partial<User>).password;
+
+    return { userWithoutPassword, token };
   }
 }
