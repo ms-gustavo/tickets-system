@@ -9,3 +9,9 @@ export interface CreateUserProps extends LoginUserProps {
   name: string;
   role: ROLE;
 }
+
+export interface TokenPayload {
+  userId: string;
+  role: string;
+  iat: number;
+}

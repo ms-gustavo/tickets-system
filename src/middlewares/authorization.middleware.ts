@@ -1,0 +1,46 @@
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { AppError } from "../shared/appErrors";
+import { TokenPayload } from "../interfaces/interface";
+import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
+
+export interface AuthRequest extends Request {
+  user?: { id: string; role: string };
+}
+
+export const authorize = (requiredRole: string) => {
+  return (req: AuthRequest, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      throw new AppError(
+        serverStringErrorsAndCodes.tokenNotProvided.message,
+        serverStringErrorsAndCodes.tokenNotProvided.code
+      );
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET as string
+      ) as TokenPayload;
+
+      if (decoded.role !== requiredRole) {
+        throw new AppError(
+          serverStringErrorsAndCodes.unauthorizedAccess.message,
+          serverStringErrorsAndCodes.unauthorizedAccess.code
+        );
+      }
+
+      req.user = { id: decoded.userId, role: decoded.role };
+      next();
+    } catch (error) {
+      throw new AppError(
+        serverStringErrorsAndCodes.invalidToken.message,
+        serverStringErrorsAndCodes.invalidToken.code
+      );
+    }
+  };
+};
