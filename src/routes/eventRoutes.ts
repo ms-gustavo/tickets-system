@@ -13,5 +13,6 @@ router.post(
   validateDTO(CreateEventDTO),
   (req, res) => eventController.createEvent(req, res)
 );
+router.get("/all", (req, res) => eventController.getAllEvents(req, res));
 
 export default router;

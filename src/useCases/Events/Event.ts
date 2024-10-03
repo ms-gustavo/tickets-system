@@ -1,14 +1,14 @@
 import { EventRepository } from "../../repositories/EventRepository";
 import { CreateEventProps } from "../../interfaces/interface";
 
-export class CreateEventUseCase {
+export class EventUseCases {
   private eventRepository: EventRepository;
 
   constructor(eventRepository: EventRepository) {
     this.eventRepository = eventRepository;
   }
 
-  async execute({
+  async create({
     title,
     description,
     date,
@@ -22,5 +22,9 @@ export class CreateEventUseCase {
       location,
       createdBy,
     });
+  }
+
+  async getAllEvents() {
+    return await this.eventRepository.getAllEvents();
   }
 }
