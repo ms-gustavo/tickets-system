@@ -1,3 +1,4 @@
+import { ROLE } from "@prisma/client";
 import UserRepository from "../repositories/UserRepository";
 import { AppError } from "../shared/appErrors";
 import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
@@ -22,7 +23,7 @@ export class RegisterUserUseCase {
     return userExists;
   }
 
-  async execute(name: string, email: string, password: string) {
+  async execute(name: string, email: string, password: string, role: ROLE) {
     const emailToLowerCase: string = email.toLowerCase();
 
     await this.checkIfUserExists(emailToLowerCase);
@@ -30,7 +31,8 @@ export class RegisterUserUseCase {
     const user = await this.userRepository.createUser(
       name,
       emailToLowerCase,
-      password
+      password,
+      role
     );
     return user;
   }

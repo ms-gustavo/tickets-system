@@ -1,3 +1,4 @@
+import { ROLE } from "@prisma/client";
 import prisma from "../../prisma/prisma";
 import bcrypt from "bcryptjs";
 
@@ -8,13 +9,14 @@ export default class UserRepository {
     });
   }
 
-  async createUser(name: string, email: string, password: string) {
+  async createUser(name: string, email: string, password: string, role: ROLE) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        role,
       },
     });
   }

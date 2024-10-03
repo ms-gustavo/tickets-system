@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Max, Min } from "class-validator";
+import { ROLE } from "@prisma/client";
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateUserDTO {
   @IsString()
@@ -11,7 +12,9 @@ export class CreateUserDTO {
 
   @IsString()
   @IsNotEmpty({ message: `A senha é obrigatória` })
-  @Min(6, { message: `A senha deve ter no mínimo 6 caracteres` })
-  @Max(20, { message: `A senha deve ter no máximo 20 caracteres` })
   password!: string;
+
+  @IsEnum(ROLE)
+  @IsNotEmpty({ message: `O papel é obrigatório` })
+  role!: ROLE;
 }

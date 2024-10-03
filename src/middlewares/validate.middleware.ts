@@ -1,27 +1,25 @@
+import { NextFunction, Request, Response } from "express";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
-import { NextFunction, Request, Response } from "express";
 
-export function validateDTO(DTOClass: any) {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const dtoObject = plainToInstance(DTOClass, req.body);
+export function validateDTO(dtoClass: any) {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const dtoInstance = plainToInstance(dtoClass, req.body);
 
-    const errors: ValidationError[] = await validate(dtoObject);
-
+    const errors: ValidationError[] = await validate(dtoInstance);
     if (errors.length > 0) {
-      const formattedErrors = errors.map((error) => {
-        const constraints = Object.values(error.constraints || {}).join(", ");
-        return {
+      res.status(400).json({
+        message: "Erro de validação",
+        errors: errors.map((error) => ({
           field: error.property,
-          error: constraints,
-        };
+          errors: Object.values(error.constraints || {}),
+        })),
       });
-
-      return res.status(400).json({
-        status: "error",
-        message: "Erro de validação dos dados",
-        details: formattedErrors,
-      });
+      return;
     }
 
     next();
