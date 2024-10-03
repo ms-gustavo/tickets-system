@@ -2,6 +2,12 @@ import prisma from "../../prisma/prisma";
 import { CreateEventProps } from "../interfaces/interface";
 
 export class EventRepository {
+  async findByName(title: string) {
+    return await prisma.event.findFirst({
+      where: { title },
+    });
+  }
+
   async createEvent({
     title,
     description,
@@ -43,6 +49,7 @@ export class EventRepository {
     description,
     date,
     location,
+    createdBy,
   }: CreateEventProps) {
     return await prisma.event.update({
       where: { id },
@@ -51,6 +58,7 @@ export class EventRepository {
         description,
         date,
         location,
+        createdBy,
       },
     });
   }

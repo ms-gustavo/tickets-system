@@ -4,4 +4,6 @@ export const serverStringErrorsAndCodes = {
   invalidToken: { message: "Token inválido ou expirado", code: 401 },
   unauthorizedAccess: { message: "Acesso não autorizado", code: 403 },
   tokenNotProvided: { message: "Token não fornecido", code: 401 },
+  eventAlreadyExists: { message: "Evento já existente", code: 400 },
+  eventNotFound: { message: "Evento não encontrado", code: 404 },
 };
