@@ -30,6 +30,7 @@ export class EventRepository {
     return await prisma.event.findMany({
       include: {
         tickets: true,
+        promotions: true,
       },
     });
   }
@@ -39,6 +40,7 @@ export class EventRepository {
       where: { id },
       include: {
         tickets: true,
+        promotions: true,
       },
     });
   }
