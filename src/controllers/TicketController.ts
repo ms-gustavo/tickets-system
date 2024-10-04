@@ -3,7 +3,6 @@ import { TicketRepository } from "../repositories/TicketRepository";
 import { TicketUseCases } from "../useCases/Tickets/Ticket";
 import { AppError } from "../shared/appErrors";
 import { CreateTicketDTO } from "../dtos/TicketDTO/create";
-import { UpdateTicketDTO } from "../dtos/TicketDTO/update";
 
 const ticketRepository = new TicketRepository();
 const ticketUseCase = new TicketUseCases(ticketRepository);
