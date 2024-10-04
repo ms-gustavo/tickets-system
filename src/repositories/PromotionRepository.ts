@@ -9,6 +9,12 @@ export class PromotionRepository {
     });
   }
 
+  async getAllPromotions() {
+    return await prisma.promotion.findMany({
+      include: { event: true },
+    });
+  }
+
   async getPromotionByCode(code: string) {
     return await prisma.promotion.findFirst({
       where: { code },

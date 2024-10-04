@@ -88,6 +88,10 @@ export class PromotionUseCases {
     return await this.promotionRepository.deletePromotion(id);
   }
 
+  async getAllPromotions() {
+    return await this.promotionRepository.getAllPromotions();
+  }
+
   async updatePromotion({
     id,
     eventId,
