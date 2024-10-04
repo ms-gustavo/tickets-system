@@ -9,4 +9,7 @@ export const serverStringErrorsAndCodes = {
   ticketAlreadyExists: { message: "Ingresso já existente", code: 400 },
   ticketNotFound: { message: "Ingresso não encontrado", code: 404 },
   invalidPriceOrAmount: { message: "Preço ou quantidade inválidos", code: 400 },
+  promotionAlreadyExists: { message: "Promoção já existente", code: 400 },
+  promotionNotFound: { message: "Promoção não encontrada", code: 404 },
+  invalidDiscount: { message: "Desconto inválido", code: 400 },
 };
