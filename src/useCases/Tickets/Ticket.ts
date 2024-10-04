@@ -52,8 +52,8 @@ export class TicketUseCases {
   }
 
   async createTicket({ eventId, price, type, amount }: TicketProps) {
-    await this.checkIfPriceAndAmountIsValid(price, amount);
     await this.eventValidationService.checkIfEventExistsById(eventId);
+    await this.checkIfPriceAndAmountIsValid(price, amount);
     const typeToUpperCase: string = type.toUpperCase();
 
     await this.checkIfTicketAlreadyExists(eventId, typeToUpperCase);
@@ -78,6 +78,7 @@ export class TicketUseCases {
   async updateTicket({ id, eventId, price, type, amount }: TicketProps) {
     await this.eventValidationService.checkIfEventExistsById(eventId);
     await this.checkIfTicketExistsById(id!);
+    await this.checkIfPriceAndAmountIsValid(price, amount);
 
     return await this.ticketRepository.updateTicket({
       id,
@@ -88,8 +89,7 @@ export class TicketUseCases {
     });
   }
 
-  async deleteTicket(eventId: string, id: string) {
-    await this.eventValidationService.checkIfEventExistsById(eventId);
+  async deleteTicket(id: string) {
     await this.checkIfTicketExistsById(id);
     return await this.ticketRepository.deleteTicket(id);
   }

@@ -102,10 +102,9 @@ export class TicketController {
 
   async deleteTicket(req: Request, res: Response) {
     const { id } = req.params;
-    const { eventId } = req.body;
 
     try {
-      await ticketUseCase.deleteTicket(eventId, id);
+      await ticketUseCase.deleteTicket(id);
       res.status(204).send();
       return;
     } catch (error: unknown) {
