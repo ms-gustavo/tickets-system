@@ -27,6 +27,14 @@ export interface TicketProps {
   amount: number;
 }
 
+export interface PromotionProps {
+  id?: string;
+  eventId: string;
+  code: string;
+  discount: number;
+  expirationDate: Date;
+}
+
 export interface TokenPayload {
   userId: string;
   role: string;
