@@ -8,4 +8,5 @@ export const serverStringErrorsAndCodes = {
   eventNotFound: { message: "Evento não encontrado", code: 404 },
   ticketAlreadyExists: { message: "Ingresso já existente", code: 400 },
   ticketNotFound: { message: "Ingresso não encontrado", code: 404 },
+  invalidPriceOrAmount: { message: "Preço ou quantidade inválidos", code: 400 },
 };

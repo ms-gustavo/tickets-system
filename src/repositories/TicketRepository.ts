@@ -2,9 +2,9 @@ import prisma from "../../prisma/prisma";
 import { TicketProps } from "../interfaces/interface";
 
 export class TicketRepository {
-  async findByType(type: string) {
+  async findByType(eventId: string, type: string) {
     return await prisma.ticket.findFirst({
-      where: { type },
+      where: { eventId, type },
     });
   }
 
@@ -17,6 +17,9 @@ export class TicketRepository {
   async getTicketById(id: string) {
     return await prisma.ticket.findUnique({
       where: { id },
+      include: {
+        event: true,
+      },
     });
   }
 

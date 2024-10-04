@@ -1,4 +1,5 @@
 import { TicketProps } from "../../interfaces/interface";
+import { EventRepository } from "../../repositories/EventRepository";
 import { TicketRepository } from "../../repositories/TicketRepository";
 import { EventValidationService } from "../../services/EventValidation/EventValidationService";
 import { AppError } from "../../shared/appErrors";
@@ -6,18 +7,19 @@ import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCod
 
 export class TicketUseCases {
   private ticketRepository: TicketRepository;
+  private eventRepository: EventRepository;
   private eventValidationService: EventValidationService;
 
-  constructor(
-    ticketRepository: TicketRepository,
-    eventValidationService: EventValidationService
-  ) {
+  constructor(ticketRepository: TicketRepository) {
     this.ticketRepository = ticketRepository;
-    this.eventValidationService = eventValidationService;
+    this.eventRepository = new EventRepository();
+    this.eventValidationService = new EventValidationService(
+      this.eventRepository
+    );
   }
 
-  private async checkIfTicketAlreadyExists(type: string) {
-    const ticketExists = await this.ticketRepository.findByType(type);
+  private async checkIfTicketAlreadyExists(eventId: string, type: string) {
+    const ticketExists = await this.ticketRepository.findByType(eventId, type);
 
     if (ticketExists) {
       throw new AppError(
@@ -40,11 +42,21 @@ export class TicketUseCases {
     return ticketExists;
   }
 
+  private async checkIfPriceAndAmountIsValid(price: number, amount: number) {
+    if (price < 0 || amount <= 0) {
+      throw new AppError(
+        serverStringErrorsAndCodes.invalidPriceOrAmount.message,
+        serverStringErrorsAndCodes.invalidPriceOrAmount.code
+      );
+    }
+  }
+
   async createTicket({ eventId, price, type, amount }: TicketProps) {
+    await this.checkIfPriceAndAmountIsValid(price, amount);
     await this.eventValidationService.checkIfEventExistsById(eventId);
     const typeToUpperCase: string = type.toUpperCase();
 
-    await this.checkIfTicketAlreadyExists(typeToUpperCase);
+    await this.checkIfTicketAlreadyExists(eventId, typeToUpperCase);
 
     return await this.ticketRepository.createTicket({
       eventId,
@@ -74,5 +86,11 @@ export class TicketUseCases {
       type,
       amount,
     });
+  }
+
+  async deleteTicket(eventId: string, id: string) {
+    await this.eventValidationService.checkIfEventExistsById(eventId);
+    await this.checkIfTicketExistsById(id);
+    return await this.ticketRepository.deleteTicket(id);
   }
 }
