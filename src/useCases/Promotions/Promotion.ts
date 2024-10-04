@@ -29,8 +29,6 @@ export class PromotionUseCases {
         serverStringErrorsAndCodes.promotionAlreadyExists.code
       );
     }
-
-    return promotionExists;
   }
 
   private async checkIfPromotionExistsById(id: string) {
@@ -76,7 +74,7 @@ export class PromotionUseCases {
   }
 
   async getPromotionByCode(code: string) {
-    return await this.checkIfPromotionAlreadyExists(code);
+    return await this.promotionRepository.getPromotionByCode(code);
   }
 
   async getPromotionsByEventId(eventId: string) {
@@ -98,6 +96,7 @@ export class PromotionUseCases {
     code,
     discount,
     expirationDate,
+    isActive,
   }: PromotionProps) {
     await this.eventValidationService.checkIfEventExistsById(eventId);
     await this.checkIfPromotionExistsById(id!);
@@ -108,6 +107,7 @@ export class PromotionUseCases {
       code,
       discount,
       expirationDate,
+      isActive,
     });
   }
 }

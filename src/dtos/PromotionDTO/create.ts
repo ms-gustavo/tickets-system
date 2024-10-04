@@ -1,5 +1,11 @@
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export class CreatePromotionDTO {
   @IsString()
@@ -17,4 +23,8 @@ export class CreatePromotionDTO {
   @Type(() => Date)
   @IsNotEmpty({ message: "A data de expiração da promoção é obrigatória" })
   expirationDate!: Date;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }

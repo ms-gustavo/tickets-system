@@ -134,9 +134,13 @@ export class PromotionController {
 
   async updatePromotion(req: Request, res: Response) {
     const { id } = req.params;
-    const { eventId, code, discount, expirationDate }: CreatePromotionDTO =
-      req.body;
-
+    const {
+      eventId,
+      code,
+      discount,
+      expirationDate,
+      isActive,
+    }: CreatePromotionDTO = req.body;
     try {
       const promotion = await promotionUseCase.updatePromotion({
         id,
@@ -144,6 +148,7 @@ export class PromotionController {
         code,
         discount,
         expirationDate,
+        isActive,
       });
       res.status(200).json(promotion);
       return;

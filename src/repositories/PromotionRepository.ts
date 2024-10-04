@@ -56,6 +56,7 @@ export class PromotionRepository {
     code,
     discount,
     expirationDate,
+    isActive,
   }: PromotionProps) {
     return await prisma.promotion.update({
       where: { id },
@@ -64,6 +65,7 @@ export class PromotionRepository {
         code,
         discount,
         expirationDate,
+        isActive,
       },
     });
   }

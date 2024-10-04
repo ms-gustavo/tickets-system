@@ -33,6 +33,7 @@ export interface PromotionProps {
   code: string;
   discount: number;
   expirationDate: Date;
+  isActive?: boolean;
 }
 
 export interface TokenPayload {
