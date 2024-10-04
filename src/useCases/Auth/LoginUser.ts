@@ -1,11 +1,11 @@
-import UserRepository from "../repositories/UserRepository";
+import UserRepository from "../../repositories/UserRepository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { AppError } from "../shared/appErrors";
+import { AppError } from "../../shared/appErrors";
 import { User } from "@prisma/client";
-import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
-import { LoginUserProps } from "../interfaces/interface";
-import TokenService from "../services/Token/TokenService";
+import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCodes";
+import { LoginUserProps } from "../../interfaces/interface";
+import TokenService from "../../services/Token/TokenService";
 
 export class LoginUserUseCase {
   private userRepository: UserRepository;

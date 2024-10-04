@@ -6,4 +6,6 @@ export const serverStringErrorsAndCodes = {
   tokenNotProvided: { message: "Token não fornecido", code: 401 },
   eventAlreadyExists: { message: "Evento já existente", code: 400 },
   eventNotFound: { message: "Evento não encontrado", code: 404 },
+  ticketAlreadyExists: { message: "Ingresso já existente", code: 400 },
+  ticketNotFound: { message: "Ingresso não encontrado", code: 404 },
 };

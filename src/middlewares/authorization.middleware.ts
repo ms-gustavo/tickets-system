@@ -13,10 +13,13 @@ export const authorize = (requiredRole: string) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      throw new AppError(
-        serverStringErrorsAndCodes.tokenNotProvided.message,
-        serverStringErrorsAndCodes.tokenNotProvided.code
+      next(
+        new AppError(
+          serverStringErrorsAndCodes.tokenNotProvided.message,
+          serverStringErrorsAndCodes.tokenNotProvided.code
+        )
       );
+      return;
     }
 
     const token = authHeader.split(" ")[1];
@@ -28,11 +31,13 @@ export const authorize = (requiredRole: string) => {
       ) as TokenPayload;
 
       if (decoded.role !== requiredRole) {
-        console.log("aqui", decoded);
-        throw new AppError(
-          serverStringErrorsAndCodes.unauthorizedAccess.message,
-          serverStringErrorsAndCodes.unauthorizedAccess.code
+        next(
+          new AppError(
+            serverStringErrorsAndCodes.unauthorizedAccess.message,
+            serverStringErrorsAndCodes.unauthorizedAccess.code
+          )
         );
+        return;
       }
 
       req.user = { id: decoded.userId, role: decoded.role };

@@ -8,6 +8,9 @@ import { UpdateEventDTO } from "../dtos/EventDTO/update";
 const eventController = new EventController();
 const router = Router();
 
+router.delete("/:id", authorize("ADMIN"), (req, res) =>
+  eventController.deleteEvent(req, res)
+);
 router.post(
   "/create",
   authorize("ADMIN"),
@@ -21,9 +24,6 @@ router.put(
   authorize("ADMIN"),
   validateDTO(UpdateEventDTO),
   (req, res) => eventController.updateEvent(req, res)
-);
-router.delete("/:id", authorize("ADMIN"), (req, res) =>
-  eventController.deleteEvent(req, res)
 );
 
 export default router;

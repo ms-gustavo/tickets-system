@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import UserRepository from "../repositories/UserRepository";
-import { LoginUserUseCase } from "../useCases/LoginUser";
-import { RegisterUserUseCase } from "../useCases/RegisterUser";
+import { LoginUserUseCase } from "../useCases/Auth/LoginUser";
+import { RegisterUserUseCase } from "../useCases/Auth/RegisterUser";
 import { CreateUserDTO } from "../dtos/UserDTO/create";
 import { AppError } from "../shared/appErrors";
 import { LoginUserDTO } from "../dtos/UserDTO/login";

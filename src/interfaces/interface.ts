@@ -19,6 +19,14 @@ export interface CreateEventProps {
   createdBy: string;
 }
 
+export interface TicketProps {
+  id?: string;
+  eventId: string;
+  price: number;
+  type: string;
+  amount: number;
+}
+
 export interface TokenPayload {
   userId: string;
   role: string;
