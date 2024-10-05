@@ -1,6 +1,5 @@
 import UserRepository from "../../repositories/UserRepository";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { AppError } from "../../shared/appErrors";
 import { User } from "@prisma/client";
 import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCodes";
