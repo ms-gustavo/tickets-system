@@ -1,5 +1,5 @@
 import { ROLE } from "@prisma/client";
-import { mockUserRepository } from "../../repositories/mocksRepositories";
+import { mockUserRepository } from "../../repositories/Mocks/mocksRepositories";
 import UserRepository from "../../repositories/UserRepository";
 import { LoginUserUseCase } from "./LoginUser";
 import bcrypt from "bcryptjs";

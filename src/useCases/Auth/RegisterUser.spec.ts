@@ -2,7 +2,7 @@ import { RegisterUserUseCase } from "./RegisterUser";
 import UserRepository from "../../repositories/UserRepository";
 import { AppError } from "../../shared/appErrors";
 import { ROLE } from "@prisma/client";
-import { mockUserRepository } from "../../repositories/mocksRepositories";
+import { mockUserRepository } from "../../repositories/Mocks/mocksRepositories";
 
 describe("User Registration Use Case", () => {
   let registerUserUseCase: RegisterUserUseCase;
