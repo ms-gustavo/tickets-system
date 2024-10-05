@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString, Max, Min } from "class-validator";
 
 export class LoginUserDTO {
-  @IsEmail()
+  @IsEmail({}, { message: `O email é inválido` })
   @IsNotEmpty({ message: `O email é obrigatório` })
   email!: string;
 

@@ -1,22 +1,19 @@
 import "reflect-metadata";
 import { validateDTO } from "../../middlewares/validate.middleware";
-import { CreateUserDTO } from "./create";
+import { LoginUserDTO } from "./login";
 import { Request, Response, NextFunction } from "express";
-import { ROLE } from "@prisma/client";
 import { removeKeyFromBody } from "../../shared/testsUtilsFunctions";
 
-describe("Create User DTO Validation", () => {
+describe("Login User DTO Validation", () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let nextFunction: NextFunction = jest.fn();
 
-  const middleware = validateDTO(CreateUserDTO);
+  const middleware = validateDTO(LoginUserDTO);
 
   const baseRequestBody = {
-    name: "Test User",
     email: "test@test.com",
     password: "password",
-    role: ROLE.USER,
   };
 
   beforeEach(() => {
@@ -30,33 +27,13 @@ describe("Create User DTO Validation", () => {
     mockRequest = { body: { ...baseRequestBody } };
   });
 
-  it("should pass validation with valid data", async () => {
+  it("should pass validation", async () => {
     await middleware(
       mockRequest as Request,
       mockResponse as Response,
       nextFunction
     );
     expect(nextFunction).toHaveBeenCalled();
-  });
-
-  it("should fail validation with invalid name", async () => {
-    removeKeyFromBody(mockRequest, "name");
-    await middleware(
-      mockRequest as Request,
-      mockResponse as Response,
-      nextFunction
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      message: "Erro de validação",
-      errors: expect.arrayContaining([
-        expect.objectContaining({
-          field: "name",
-          errors: expect.arrayContaining(["O nome é obrigatório"]),
-        }),
-      ]),
-    });
   });
 
   it("should fail validation with invalid email", async () => {
@@ -73,7 +50,10 @@ describe("Create User DTO Validation", () => {
       errors: expect.arrayContaining([
         expect.objectContaining({
           field: "email",
-          errors: expect.arrayContaining(["O email é obrigatório"]),
+          errors: expect.arrayContaining([
+            "O email é obrigatório",
+            "O email é inválido",
+          ]),
         }),
       ]),
     });
@@ -94,26 +74,6 @@ describe("Create User DTO Validation", () => {
         expect.objectContaining({
           field: "password",
           errors: expect.arrayContaining(["A senha é obrigatória"]),
-        }),
-      ]),
-    });
-  });
-
-  it("should fail validation with invalid role", async () => {
-    removeKeyFromBody(mockRequest, "role");
-    await middleware(
-      mockRequest as Request,
-      mockResponse as Response,
-      nextFunction
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      message: "Erro de validação",
-      errors: expect.arrayContaining([
-        expect.objectContaining({
-          field: "role",
-          errors: expect.arrayContaining(["O papel é obrigatório"]),
         }),
       ]),
     });
