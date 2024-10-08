@@ -15,7 +15,7 @@ jest.mock("uuid", () => {
   };
 });
 
-describe("User Registration Use Case", () => {
+describe("Temp User Registration Use Case", () => {
   let registerTempUserUseCase: RegisterTempUserUseCase;
   const userData = {
     name: "Test User",
@@ -31,7 +31,7 @@ describe("User Registration Use Case", () => {
     );
   });
 
-  it("should send an confirmation link to email when", async () => {
+  it("should send an confirmation link to email", async () => {
     mockUserTempRepository.findByEmail.mockResolvedValueOnce(null);
     mockUserTempRepository.createUserTemp.mockResolvedValueOnce({
       id: "1",
