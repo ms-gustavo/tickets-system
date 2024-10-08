@@ -1,13 +1,15 @@
-import { CreateUserProps } from "../../interfaces/interface";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import UserTempRepository from "../../repositories/UserTempRepository";
+import dotenv from "dotenv";
+import { CreateUserProps } from "../../interfaces/interface";
 import { AppError } from "../../shared/appErrors";
 import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCodes";
 import { AuthRegisterEmailNotification } from "../../utils/emailMessages";
 import { EmailService } from "../../services/Email/EmailService";
-import UserRepository from "../../repositories/UserRepository";
 import { UserValidationService } from "../../services/UserValidation/UserValidationService";
+import UserRepository from "../../repositories/UserRepository";
+import UserTempRepository from "../../repositories/UserTempRepository";
+dotenv.config();
 
 export class RegisterTempUserUseCase {
   private userTempRepository: UserTempRepository;

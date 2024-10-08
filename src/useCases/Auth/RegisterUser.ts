@@ -4,8 +4,6 @@ import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCod
 import TokenService from "../../services/Token/TokenService";
 import { User } from "@prisma/client";
 import UserTempRepository from "../../repositories/UserTempRepository";
-import dotenv from "dotenv";
-dotenv.config();
 
 export class RegisterUserUseCase {
   private userRepository: UserRepository;
