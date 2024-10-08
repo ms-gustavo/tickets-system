@@ -18,4 +18,5 @@ export const serverStringErrorsAndCodes = {
     message: "Falha no registro",
     code: 400,
   },
+  invalidPromoCode: { message: "Código de promoção inválido", code: 400 },
 };

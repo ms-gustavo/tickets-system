@@ -31,6 +31,16 @@ export interface TicketProps {
   amount: number;
 }
 
+export interface PurchaseProps {
+  id?: string;
+  userId: string;
+  eventId: string;
+  ticketId: string;
+  quantity: number;
+  totalPrice: number;
+  discount?: number;
+}
+
 export interface PromotionProps {
   id?: string;
   eventId: string;
