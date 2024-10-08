@@ -12,6 +12,11 @@ export const serverStringErrorsAndCodes = {
   invalidPriceOrAmount: { message: "Preço ou quantidade inválidos", code: 400 },
   promotionAlreadyExists: { message: "Promoção já existente", code: 400 },
   promotionNotFound: { message: "Promoção não encontrada", code: 404 },
+  promotionNotFoundOrExpired: {
+    message: "Promoção não encontrada ou expirada",
+    code: 400,
+  },
+  promotionExpired: { message: "Promoção expirada", code: 400 },
   invalidDiscount: { message: "Desconto inválido", code: 400 },
   emailNotSent: { message: "Email não enviado", code: 500 },
   registerFailed: {

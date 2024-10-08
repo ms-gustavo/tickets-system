@@ -2,6 +2,7 @@ import { TicketProps } from "../../interfaces/interface";
 import { EventRepository } from "../../repositories/EventRepository";
 import { TicketRepository } from "../../repositories/TicketRepository";
 import { EventValidationService } from "../../services/EventValidation/EventValidationService";
+import { TicketValidationService } from "../../services/TicketValidation/TicketValidationService";
 import { AppError } from "../../shared/appErrors";
 import { serverStringErrorsAndCodes } from "../../utils/serverStringErrorsAndCodes";
 
@@ -9,12 +10,16 @@ export class TicketUseCases {
   private ticketRepository: TicketRepository;
   private eventRepository: EventRepository;
   private eventValidationService: EventValidationService;
+  private ticketValidationService: TicketValidationService;
 
   constructor(ticketRepository: TicketRepository) {
     this.ticketRepository = ticketRepository;
     this.eventRepository = new EventRepository();
     this.eventValidationService = new EventValidationService(
       this.eventRepository
+    );
+    this.ticketValidationService = new TicketValidationService(
+      this.ticketRepository
     );
   }
 
@@ -27,19 +32,6 @@ export class TicketUseCases {
         serverStringErrorsAndCodes.ticketAlreadyExists.code
       );
     }
-  }
-
-  private async checkIfTicketExistsById(id: string) {
-    const ticketExists = await this.ticketRepository.getTicketById(id);
-
-    if (!ticketExists) {
-      throw new AppError(
-        serverStringErrorsAndCodes.ticketNotFound.message,
-        serverStringErrorsAndCodes.ticketNotFound.code
-      );
-    }
-
-    return ticketExists;
   }
 
   private async checkIfPriceAndAmountIsValid(price: number, amount: number) {
@@ -77,7 +69,7 @@ export class TicketUseCases {
 
   async updateTicket({ id, eventId, price, type, amount }: TicketProps) {
     await this.eventValidationService.checkIfEventExistsById(eventId);
-    await this.checkIfTicketExistsById(id!);
+    await this.ticketValidationService.checkIfTicketExists(id!);
     await this.checkIfPriceAndAmountIsValid(price, amount);
 
     return await this.ticketRepository.updateTicket({
@@ -90,7 +82,7 @@ export class TicketUseCases {
   }
 
   async deleteTicket(id: string) {
-    await this.checkIfTicketExistsById(id);
+    await this.ticketValidationService.checkIfTicketExists(id);
     return await this.ticketRepository.deleteTicket(id);
   }
 }

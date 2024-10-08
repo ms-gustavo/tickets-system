@@ -38,7 +38,7 @@ export interface PurchaseProps {
   ticketId: string;
   quantity: number;
   totalPrice: number;
-  discount?: number;
+  promotionCode?: string;
 }
 
 export interface PromotionProps {

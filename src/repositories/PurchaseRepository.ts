@@ -8,10 +8,10 @@ export class PurchaseRepository {
     ticketId,
     quantity,
     totalPrice,
-    discount,
+    promotionCode,
   }: PurchaseProps) {
     return await prisma.purchase.create({
-      data: { userId, eventId, ticketId, quantity, totalPrice, discount },
+      data: { userId, eventId, ticketId, quantity, totalPrice, promotionCode },
     });
   }
 
@@ -24,6 +24,12 @@ export class PurchaseRepository {
   async getPurchaseById(id: string) {
     return await prisma.purchase.findUnique({
       where: { id },
+    });
+  }
+
+  async getPurchasesByEventId(eventId: string) {
+    return await prisma.purchase.findMany({
+      where: { eventId },
     });
   }
 }
