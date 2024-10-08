@@ -41,3 +41,14 @@ export interface TokenPayload {
   role: string;
   iat: number;
 }
+
+export interface SendEmailLoginProps {
+  email: string;
+  subject: string;
+  text: string;
+  attachment?: {
+    filename: string;
+    content: Buffer;
+    contentType: string;
+  };
+}

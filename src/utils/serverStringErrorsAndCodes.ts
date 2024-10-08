@@ -12,4 +12,5 @@ export const serverStringErrorsAndCodes = {
   promotionAlreadyExists: { message: "Promoção já existente", code: 400 },
   promotionNotFound: { message: "Promoção não encontrada", code: 404 },
   invalidDiscount: { message: "Desconto inválido", code: 400 },
+  emailNotSent: { message: "Email não enviado", code: 500 },
 };
