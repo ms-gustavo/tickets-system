@@ -21,6 +21,8 @@ model User {
   role ROLE
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Purchase Purchase[]
 }
 
 model UserTemp {
@@ -44,6 +46,8 @@ model Event {
   promotions Promotion[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Purchase Purchase[]
 }
 
 model Ticket {
@@ -55,6 +59,8 @@ model Ticket {
   eventId String @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Purchase Purchase[]
 }
 
 model Promotion {
@@ -67,4 +73,20 @@ model Promotion {
   eventId String @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Purchase {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id])
+  eventId String @db.ObjectId
+  event Event @relation(fields: [eventId], references: [id])
+  ticketId String @db.ObjectId
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  quantity Int
+  totalPrice Float
+  discount Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
 }
