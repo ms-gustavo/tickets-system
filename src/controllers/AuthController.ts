@@ -6,8 +6,12 @@ import { CreateUserDTO } from "../dtos/UserDTO/create";
 import { AppError } from "../shared/appErrors";
 import { LoginUserDTO } from "../dtos/UserDTO/login";
 import { serverStringErrorsAndCodes } from "../utils/serverStringErrorsAndCodes";
+import UserTempRepository from "../repositories/UserTempRepository";
+import { RegisterTempUserUseCase } from "../useCases/Auth/RegisterTempUser";
 
 const userRepository = new UserRepository();
+const userTempRepository = new UserTempRepository();
+const registerTempUserUseCase = new RegisterTempUserUseCase(userTempRepository);
 const registerUserUseCase = new RegisterUserUseCase(userRepository);
 
 export class AuthController {
@@ -15,7 +19,7 @@ export class AuthController {
     const { name, email, password, role }: CreateUserDTO = req.body;
 
     try {
-      const result = await registerUserUseCase.registerUser({
+      const result = await registerTempUserUseCase.execute({
         name,
         email,
         password,
@@ -51,8 +55,9 @@ export class AuthController {
     const { confirmId } = req.params;
 
     try {
-      const { userWithoutPassword, token } =
-        await registerUserUseCase.confirmRegistration(confirmId);
+      const { userWithoutPassword, token } = await registerUserUseCase.execute(
+        confirmId
+      );
       res.status(200).json({ user: userWithoutPassword, token });
       return;
     } catch (error: unknown) {
