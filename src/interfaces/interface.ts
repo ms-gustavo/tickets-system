@@ -10,6 +10,10 @@ export interface CreateUserProps extends LoginUserProps {
   role: ROLE;
 }
 
+export interface CreateTempUserProps extends CreateUserProps {
+  confirmId: string;
+}
+
 export interface CreateEventProps {
   id?: string;
   title: string;
@@ -50,5 +54,18 @@ export interface SendEmailLoginProps {
     filename: string;
     content: Buffer;
     contentType: string;
+  };
+}
+
+export interface EmailServiceMessagesProps {
+  name?: string;
+  newConfirmationLink?: string;
+  fromUser?: string;
+  amount?: number;
+  toUser?: string;
+  attachment?: {
+    filename?: string;
+    content: Buffer;
+    contentType?: string;
   };
 }

@@ -1,6 +1,7 @@
 export const serverStringErrorsAndCodes = {
   invalidEmailOrPassword: { message: "Email ou senha inválidos", code: 400 },
   userAlreadyExists: { message: "Usuário existente", code: 400 },
+  userNotFound: { message: "Usuário não encontrado", code: 404 },
   invalidToken: { message: "Token inválido ou expirado", code: 401 },
   unauthorizedAccess: { message: "Acesso não autorizado", code: 403 },
   tokenNotProvided: { message: "Token não fornecido", code: 401 },
@@ -13,4 +14,8 @@ export const serverStringErrorsAndCodes = {
   promotionNotFound: { message: "Promoção não encontrada", code: 404 },
   invalidDiscount: { message: "Desconto inválido", code: 400 },
   emailNotSent: { message: "Email não enviado", code: 500 },
+  registerFailed: {
+    message: "Falha no registro",
+    code: 400,
+  },
 };

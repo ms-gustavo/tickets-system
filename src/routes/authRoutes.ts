@@ -7,6 +7,9 @@ import { LoginUserDTO } from "../dtos/UserDTO/login";
 const authController = new AuthController();
 const router = Router();
 
+router.get("/confirm-registration/:confirmId", (req, res) =>
+  authController.confirmRegistration(req, res)
+);
 router.post("/register", validateDTO(CreateUserDTO), (req, res) =>
   authController.register(req, res)
 );
