@@ -79,3 +79,23 @@ export interface EmailServiceMessagesProps {
     contentType?: string;
   };
 }
+
+export interface PurchaseData {
+  userId: string;
+  eventId: string;
+  ticketId: string;
+  quantity: number;
+  totalPrice: number;
+  promotionCode?: string | null;
+}
+
+export interface TicketData {
+  ticketId: string;
+  userName: string;
+  userEmail: string;
+  eventTitle: string;
+  ticketType: string;
+  ticketPrice: number;
+  eventDate: Date;
+  eventLocation: string;
+}

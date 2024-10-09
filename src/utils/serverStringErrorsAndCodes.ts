@@ -24,4 +24,5 @@ export const serverStringErrorsAndCodes = {
     code: 400,
   },
   invalidPromoCode: { message: "Código de promoção inválido", code: 400 },
+  ticketSoldOut: { message: "Ingresso esgotado", code: 400 },
 };

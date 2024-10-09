@@ -8,6 +8,12 @@ export default class UserRepository {
     });
   }
 
+  async findById(id: string) {
+    return await prisma.user.findUnique({
+      where: { id },
+    });
+  }
+
   async createUser({ name, email, password, role }: CreateUserProps) {
     return await prisma.user.create({
       data: {
