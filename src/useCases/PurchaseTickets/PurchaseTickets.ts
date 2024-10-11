@@ -1,4 +1,5 @@
-import { PurchaseData } from "../../interfaces/interface";
+import { stripVTControlCharacters } from "util";
+import { CreatePaymentIntent, FinalizePurchase, PurchaseData, PurchaseRecord } from "../../interfaces/interface";
 import { EventRepository } from "../../repositories/EventRepository";
 import { PromotionRepository } from "../../repositories/PromotionRepository";
 import { PurchaseRepository } from "../../repositories/PurchaseRepository";
@@ -94,6 +95,109 @@ export class PurchaseUseCase {
         contentType: "application/pdf",
       },
     });
+  }
+
+  private async checkIfAreTicketsAvailable(ticketId: string, quantity: number){
+    const ticket = await this.ticketValidationService.checkIfTicketExists(ticketId)
+
+    if(ticket.amount < quantity){
+      throw new AppError(
+        serverStringErrorsAndCodes.ticketSoldOut.message,
+        serverStringErrorsAndCodes.ticketSoldOut.code
+      )
+    }
+  
+    return ticket
+    }
+
+
+    private async calculateTicketValue(quantity: number, ticket:any, promotionCode?: string){
+
+    let appliedPromotionId: string | undefined;
+    let totalPrice = ticket.price * quantity;
+    if (promotionCode) {
+      const { promotionId, discountedPrice } = await this.applyPromotion(
+        promotionCode,
+        ticket.price
+      );
+      totalPrice = discountedPrice * quantity;
+      appliedPromotionId = promotionId;
+    }
+
+    return {totalPrice, appliedPromotionId}
+
+    }
+
+    private async createPurchaseRecord({userId, eventId, ticketId, quantity, appliedPromotionId, totalPrice}: PurchaseRecord){
+      const purchases = [];
+      for (let i = 0; i < quantity; i++) {
+        const purchaseRecord = await this.purchaseRepository.createPurchase({
+          userId,
+          eventId,
+          ticketId,
+          quantity: 1,
+          totalPrice: totalPrice / quantity,
+          promotionCode: appliedPromotionId,
+        });
+        purchases.push(purchaseRecord);
+      } 
+
+      return purchases
+    }
+
+
+  async createPaymentIntent({
+    userId,
+    eventId,
+    ticketId,
+    quantity,
+    promotionCode
+  }: CreatePaymentIntent) {
+    const ticket = await this.checkIfAreTicketsAvailable(ticketId, quantity);
+
+    const { totalPrice, appliedPromotionId } = await this.calculateTicketValue(quantity, ticket, promotionCode)
+
+    //TODO: INSTALAR STRIPE
+    const amountInCents = totalPrice * 100
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amountInCents,
+      currency: 'brl',
+      metadata: {
+        userId: userId,
+        eventId: eventId,
+        ticketId: ticketId,
+        quantity: quantity.toString()
+      }
+    })
+
+
+    return {clientSecret: paymentIntent.client_secret}
+  }
+
+  async finalizePurchase({
+    paymentIntentId,
+    userId,
+    eventId,
+    ticketId,
+    quantity,
+    promotionCode
+  }: FinalizePurchase ){
+    
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentid)
+
+    if(paymentIntent.status !== 'succeeded'){
+      throw new AppError(`Pagamento não foi confirmado`, 400)
+    }
+
+    const ticket = await this.checkIfAreTicketsAvailable(ticketId, quantity);
+
+    const { totalPrice, appliedPromotionId } = await this.calculateTicketValue(quantity, ticket, promotionCode)
+
+    const purchases = await this.createPurchaseRecord({userId, eventId, ticketId, quantity, appliedPromotionId, totalPrice})
+    
+    return purchases
+
   }
 
   async execute({

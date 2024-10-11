@@ -99,3 +99,20 @@ export interface TicketData {
   eventDate: Date;
   eventLocation: string;
 }
+
+export interface CreatePaymentIntent {
+  userId: string;
+  eventId: string;
+  ticketId: string;
+  quantity: number;
+  promotionCode?: string
+}
+
+export interface PurchaseRecord extends CreatePaymentIntent {
+  totalPrice: number;
+  appliedPromotionId: string | undefined
+}
+
+export interface FinalizePurchase extends CreatePaymentIntent {
+  paymentIntentId: string
+}
