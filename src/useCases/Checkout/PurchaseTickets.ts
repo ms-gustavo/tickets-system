@@ -59,7 +59,8 @@ export class PurchaseUseCase {
   private async applyPromotion(promotionCode: string, ticketPrice: number) {
     const promotion = await this.checkIfPromotionIsActive(promotionCode);
 
-    const discountedPrice = ticketPrice - (1 * promotion.discount) / 100;
+    const discountedPrice =
+      ticketPrice - (ticketPrice * promotion.discount) / 100;
     return { promotionId: promotion.id, discountedPrice };
   }
 
@@ -78,14 +79,14 @@ export class PurchaseUseCase {
     if (purchaseData.length === 0) {
       throw new AppError("Nenhum dado de compra fornecido.", 400);
     }
-    const { userId, eventId, ticketId, totalPrice, quantity } = purchaseData[0];
+    console.log("DADOS DA COMPRA", purchaseData);
+    const { userId, eventId, ticketId, totalPrice } = purchaseData[0];
     const { user, event } = await this.getUserAndEventData(userId, eventId);
     const ticketType =
       event!.tickets.find((ticket) => ticket.id === ticketId)?.type ||
       "Não informado";
-
     const allPdfBuffers = await Promise.all(
-      Array.from({ length: purchaseData[0].quantity }, async (_, i) => {
+      Array.from({ length: purchaseData.length }, async (_, i) => {
         const pdfBuffer = await GeneratePDFService.generateTicketPDF({
           ticketId,
           userName: user!.name,
@@ -194,6 +195,7 @@ export class PurchaseUseCase {
     quantity,
     promotionCode,
   }: FinalizePurchase) {
+    console.log("QUANTIDADE FINALIZE PURCH", quantity);
     //JUST FOR TESTING BECAUSE I CANNOT CHANGE THE PAYMENT INTENTION STATUS PROPERLY WITHOUT THE FRONT END
     const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
       payment_method: "pm_card_visa",
@@ -215,7 +217,7 @@ export class PurchaseUseCase {
       appliedPromotionId,
       totalPrice,
     });
-
+    console.log(purchases);
     await this.ticketRepository.updateTicket({
       id: ticketId,
       eventId,
