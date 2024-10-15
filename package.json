@@ -44,6 +44,7 @@
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
     "stream-buffers": "^3.0.3",
+    "stripe": "^17.2.0",
     "uuid": "^10.0.0"
   }
 }

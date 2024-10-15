@@ -21,14 +21,14 @@ export class EmailService {
     email,
     subject,
     text,
-    attachment,
+    attachments,
   }: SendEmailLoginProps) {
     const mailOptions = {
       from: emailUser,
       to: email,
       subject,
       text,
-      attachments: attachment ? [attachment] : undefined,
+      attachments: attachments ? attachments : undefined,
     };
 
     try {

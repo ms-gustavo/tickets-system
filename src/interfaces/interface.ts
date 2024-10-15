@@ -58,13 +58,18 @@ export interface TokenPayload {
 
 export interface SendEmailLoginProps {
   email: string;
+
   subject: string;
+
   text: string;
-  attachment?: {
+
+  attachments?: {
     filename: string;
+
     content: Buffer;
+
     contentType: string;
-  };
+  }[];
 }
 
 export interface EmailServiceMessagesProps {
@@ -105,14 +110,14 @@ export interface CreatePaymentIntent {
   eventId: string;
   ticketId: string;
   quantity: number;
-  promotionCode?: string
+  promotionCode?: string;
 }
 
 export interface PurchaseRecord extends CreatePaymentIntent {
   totalPrice: number;
-  appliedPromotionId: string | undefined
+  appliedPromotionId: string | undefined;
 }
 
 export interface FinalizePurchase extends CreatePaymentIntent {
-  paymentIntentId: string
+  paymentIntentId: string;
 }
