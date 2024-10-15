@@ -3,6 +3,7 @@ import {
   FinalizePurchase,
   PurchaseData,
   PurchaseRecord,
+  TicketProps,
 } from "../../interfaces/interface";
 import { EventRepository } from "../../repositories/EventRepository";
 import { PromotionRepository } from "../../repositories/PromotionRepository";
@@ -74,20 +75,24 @@ export class PurchaseUseCase {
   private async finalizePurchaseSendingTicketPDFToEmail(
     purchaseData: PurchaseData[]
   ) {
-    const { user, event } = await this.getUserAndEventData(
-      purchaseData[0].userId,
-      purchaseData[0].eventId
-    );
+    if (purchaseData.length === 0) {
+      throw new AppError("Nenhum dado de compra fornecido.", 400);
+    }
+    const { userId, eventId, ticketId, totalPrice, quantity } = purchaseData[0];
+    const { user, event } = await this.getUserAndEventData(userId, eventId);
+    const ticketType =
+      event!.tickets.find((ticket) => ticket.id === ticketId)?.type ||
+      "Não informado";
 
     const allPdfBuffers = await Promise.all(
       Array.from({ length: purchaseData[0].quantity }, async (_, i) => {
         const pdfBuffer = await GeneratePDFService.generateTicketPDF({
-          ticketId: purchaseData[0].ticketId,
+          ticketId,
           userName: user!.name,
           userEmail: user!.email,
           eventTitle: event!.title,
-          ticketType: event!.title,
-          ticketPrice: purchaseData[0].totalPrice,
+          ticketType,
+          ticketPrice: totalPrice,
           eventDate: event!.date,
           eventLocation: event!.location,
         });
@@ -123,7 +128,7 @@ export class PurchaseUseCase {
 
   private async calculateTicketValue(
     quantity: number,
-    ticket: any,
+    ticket: TicketProps,
     promotionCode?: string
   ) {
     const basePrice = ticket.price * quantity;

@@ -4,7 +4,12 @@ import { CreateEventProps } from "../interfaces/interface";
 export class EventRepository {
   async findByName(title: string) {
     return await prisma.event.findFirst({
-      where: { title },
+      where: {
+        title: {
+          equals: title,
+          mode: "insensitive",
+        },
+      },
     });
   }
 

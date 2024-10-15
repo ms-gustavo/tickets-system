@@ -46,14 +46,13 @@ export class TicketUseCases {
   async createTicket({ eventId, price, type, amount }: TicketProps) {
     await this.eventValidationService.checkIfEventExistsById(eventId);
     await this.checkIfPriceAndAmountIsValid(price, amount);
-    const typeToUpperCase: string = type.toUpperCase();
 
-    await this.checkIfTicketAlreadyExists(eventId, typeToUpperCase);
+    await this.checkIfTicketAlreadyExists(eventId, type);
 
     return await this.ticketRepository.createTicket({
       eventId,
       price,
-      type: typeToUpperCase,
+      type,
       amount,
     });
   }

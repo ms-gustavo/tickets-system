@@ -33,12 +33,10 @@ export class EventUseCases {
     location,
     createdBy,
   }: CreateEventProps) {
-    const titleToUpperCase: string = title.toUpperCase();
-
-    await this.checkIfEventExistsByName(titleToUpperCase);
+    await this.checkIfEventExistsByName(title);
 
     return await this.eventRepository.createEvent({
-      title: titleToUpperCase,
+      title,
       description,
       date,
       location,
@@ -66,11 +64,9 @@ export class EventUseCases {
   }: CreateEventProps) {
     await this.eventValidationService.checkIfEventExistsById(id!);
 
-    const titleToUpperCase: string = title?.toUpperCase();
-
     return await this.eventRepository.updateEvent({
       id,
-      title: titleToUpperCase,
+      title,
       description,
       date,
       location,

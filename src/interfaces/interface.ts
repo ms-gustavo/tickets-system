@@ -29,6 +29,9 @@ export interface TicketProps {
   price: number;
   type: string;
   amount: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  event?: EventProps;
 }
 
 export interface PurchaseProps {
@@ -58,16 +61,11 @@ export interface TokenPayload {
 
 export interface SendEmailLoginProps {
   email: string;
-
   subject: string;
-
   text: string;
-
   attachments?: {
     filename: string;
-
     content: Buffer;
-
     contentType: string;
   }[];
 }
@@ -120,4 +118,15 @@ export interface PurchaseRecord extends CreatePaymentIntent {
 
 export interface FinalizePurchase extends CreatePaymentIntent {
   paymentIntentId: string;
+}
+
+export interface EventProps {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  description: string;
+  date: Date;
+  location: string;
+  createdBy: string;
 }

@@ -4,7 +4,13 @@ import { TicketProps } from "../interfaces/interface";
 export class TicketRepository {
   async findByType(eventId: string, type: string) {
     return await prisma.ticket.findFirst({
-      where: { eventId, type },
+      where: {
+        eventId,
+        type: {
+          equals: type,
+          mode: "insensitive",
+        },
+      },
     });
   }
 
