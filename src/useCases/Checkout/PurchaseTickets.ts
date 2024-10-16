@@ -77,9 +77,8 @@ export class PurchaseUseCase {
     purchaseData: PurchaseData[]
   ) {
     if (purchaseData.length === 0) {
-      throw new AppError("Nenhum dado de compra fornecido.", 400);
+      throw new AppError(serverStringErrorsAndCodes.noCheckoutData.message, serverStringErrorsAndCodes.noCheckoutData.code);
     }
-    console.log("DADOS DA COMPRA", purchaseData);
     const { userId, eventId, ticketId, totalPrice } = purchaseData[0];
     const { user, event } = await this.getUserAndEventData(userId, eventId);
     const ticketType =
@@ -201,7 +200,7 @@ export class PurchaseUseCase {
       payment_method: "pm_card_visa",
     });
     if (paymentIntent.status !== "succeeded")
-      throw new AppError(`Pagamento não foi confirmado`, 400);
+      throw new AppError(serverStringErrorsAndCodes.paymentNotConfirmed.message, serverStringErrorsAndCodes.paymentNotConfirmed.code);
 
     const ticket = await this.checkIfAreTicketsAvailable(ticketId, quantity);
     const { totalPrice, appliedPromotionId } = await this.calculateTicketValue(

@@ -25,4 +25,6 @@ export const serverStringErrorsAndCodes = {
   },
   invalidPromoCode: { message: "Código de promoção inválido", code: 400 },
   ticketSoldOut: { message: "Ingresso esgotado", code: 400 },
+  noCheckoutData: { message: "Nenhum dado de compra fornecido." , code: 400},
+  paymentNotConfirmed: {message: "Pagamento não confirmado." , code: 400}
 };
