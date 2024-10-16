@@ -82,7 +82,7 @@ export class PurchaseUseCase {
     const { userId, eventId, ticketId, totalPrice } = purchaseData[0];
     const { user, event } = await this.getUserAndEventData(userId, eventId);
     const ticketType =
-      event!.tickets.find((ticket) => ticket.id === ticketId)?.type ||
+      event!.tickets.find((ticket: TicketProps) => ticket.id === ticketId)?.type ||
       "Não informado";
     const allPdfBuffers = await Promise.all(
       Array.from({ length: purchaseData.length }, async (_, i) => {
